@@ -14,7 +14,7 @@
 clear; clc;
 
 %% ===================== [INPUT] =====================
-resultFile = 'result.mat';      % 결과 파일
+resultFile = 'result.mat';      % 결과 파일 경로 (문자열). load(...) 는 붙이지 않는다
 sVar       = 'S';               % 파일 안의 setup 변수 이름
 rVar       = 'R';               % 파일 안의 결과 변수 이름
 
@@ -33,7 +33,11 @@ saveDir    = 'fig';
 %% ===================================================
 
 % ---- 결과 불러오기 ----
-D = load(resultFile);
+if isstruct(resultFile)                    % load(...) 결과를 그대로 넣은 경우도 허용
+    D = resultFile;
+else
+    D = load(resultFile);
+end
 assert(isfield(D, sVar) && isfield(D, rVar), ...
        '%s 안에 변수 ''%s'', ''%s'' 가 모두 있어야 한다 (현재: %s)', ...
        resultFile, sVar, rVar, strjoin(fieldnames(D)', ', '));
